@@ -1,16 +1,17 @@
 global using WebApi.Models;
 global using WebApi.Services;
+global using WebApi.DTOs;
 
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddScoped<ICharacterService, CharacterService>();
-
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddScoped<ICharacterService, CharacterService>();
 
 var app = builder.Build();
 

@@ -1,4 +1,9 @@
+global using WebApi.Models;
+global using WebApi.Services;
+
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddScoped<ICharacterService, CharacterService>();
 
 // Add services to the container.
 

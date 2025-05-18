@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Dtos;
+using WebApi.Dtos.Character;
 using WebApi.Models;
 using WebApi.Services;
 
@@ -60,6 +61,13 @@ namespace WebApi.Controllers
                 return NotFound(response);
             }
             return Ok(response);
+        }
+
+        [HttpPost("Skill")]
+        public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> AddCharacterSkill(
+           AddCharacterSkillDto newCharacterSkill)
+        {
+            return Ok(await _characterService.AddCharacterSkill(newCharacterSkill));
         }
     }
 }

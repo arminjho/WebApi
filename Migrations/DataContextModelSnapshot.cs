@@ -85,9 +85,11 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Models.Character", b =>
                 {
-                    b.HasOne("WebApi.Models.User", null)
+                    b.HasOne("WebApi.Models.User", "User")
                         .WithMany("Characters")
                         .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WebApi.Models.User", b =>

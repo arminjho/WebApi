@@ -11,8 +11,8 @@ using WebApi.Data;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250518134256_UserCharacterRelationship")]
-    partial class UserCharacterRelationship
+    [Migration("20250518151805_Mig1")]
+    partial class Mig1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -88,9 +88,11 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Models.Character", b =>
                 {
-                    b.HasOne("WebApi.Models.User", null)
+                    b.HasOne("WebApi.Models.User", "User")
                         .WithMany("Characters")
                         .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WebApi.Models.User", b =>

@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WebApi.Dtos;
 using WebApi.Models;
 using WebApi.Services;
 
 namespace WebApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CharacterController:ControllerBase
@@ -21,6 +24,7 @@ namespace WebApi.Controllers
         public async Task<ActionResult<List<ServiceResponse<GetCharacterDto>>>>Get()
         {
             return Ok(await _characterService.GetAllCharacters());
+            
         }
 
         [HttpGet("{id}")]

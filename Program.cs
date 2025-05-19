@@ -7,9 +7,19 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using Serilog;
+
+
+
 
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog((context, configuration) =>
+{
+    configuration.ReadFrom.Configuration(context.Configuration)
+                 .WriteTo.Console() 
+                 .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day); 
+});
 // Add services to the container.
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -36,6 +46,7 @@ builder.Services.AddScoped<ICharacterService, CharacterService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IWeaponService, WeaponService>();
 builder.Services.AddScoped<IFightService, FightService>();
+builder.Services.AddScoped<ISerilogService, SerilogService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -53,6 +64,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
+
+app.UseSerilogRequestLogging();
+app.MapGet("/", (ISerilogService svc) => svc.log());
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

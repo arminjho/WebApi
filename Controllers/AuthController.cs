@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using WebApi.Data;
 using WebApi.Dtos;
 
@@ -9,10 +10,12 @@ namespace WebApi.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthRepository _authRepo;
+        private readonly ILogger<AuthController> _logger;
 
-        public AuthController(IAuthRepository authRepo)
+        public AuthController(IAuthRepository authRepo, ILogger<AuthController> logger)
         {
             _authRepo = authRepo;
+            _logger = logger;
         }
 
         [HttpPost("Register")]
@@ -23,7 +26,8 @@ namespace WebApi.Controllers
             );
             if (!response.Success)
             {
-                return BadRequest(response);
+                _logger.LogError("Error ocurred with register method");
+                return StatusCode(500, response);
             }
             return Ok(response);
         }
@@ -34,9 +38,13 @@ namespace WebApi.Controllers
             var response = await _authRepo.Login(request.Username, request.Password);
             if (!response.Success)
             {
-                return BadRequest(response);
+                _logger.LogError("Error ocurred with login method");
+                return StatusCode(500, response);
             }
             return Ok(response);
         }
+
+        
+
     }
 }
